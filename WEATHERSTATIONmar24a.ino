@@ -81,7 +81,6 @@ void loop() {
    altitude = bmp.readAltitude(SEA_LEVEL_PRESSURE);
   //sound_Level = analogRead(sound_sensor);
   light_Intensity = (analogRead(light_sensor));
-  //float lux = a * pow(sensorValuelight, b);
 
   float temp = dht.readTemperature();
   temperature = (temp * temp_slope) + temp_offset;
