@@ -85,8 +85,8 @@ void loop() {
   temperature = dht.readTemperature();
   float humidity = dht.readHumidity();
   hUMIDITY=(humidity * humidity_slope) + humidity_offset;
-  int mq2Level = analogRead(MQ2_PIN)/10;
-  int mq9Level = analogRead(MQ9_PIN)10;
+  int mq2Level = analogRead(MQ2_PIN)/21.66;
+  int mq9Level = analogRead(MQ9_PIN)/21.66;
   air_quality = mq9Level;
   if(mq2Level < 60 && mq9Level < 60){
     air_QualityText = "Air Quality is Good";
