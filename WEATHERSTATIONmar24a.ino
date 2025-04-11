@@ -15,15 +15,15 @@
 
 DHT dht(DHTpin, DHTTYPE);
 Adafruit_BMP280 bmp;
-const char* scriptURL = "https://script.google.com/macros/s/AKfycbxO-aXDTc6TULZauDNhrlD2fstRPUISsgwQ_ER0j8I47Hx0o_pTNZzuJhaeGIaCrNHc/exec";
+const char* scriptURL = "https://script.google.com/macros/s/AKfycbyiAzJQMpLRrJMgIOypgsmLGc6z0T3sme9NCfbucYKowAScMXAnPrXsi8iQWLF-L6Hv/exec";
 
 
 //variables for calliberation of sensor values......
 float temp_slope = 1.0; // temperature
-float temp_offset = -0.399;
+float temp_offset = 0.0;
 
 float humidity_slope = 1.0; //humidity
-float humidity_offset = 4.0;
+float humidity_offset = 0.0;
 
 //float a = 1000.0; //light intensity
 //float b =-0.5; 
@@ -77,12 +77,13 @@ void loop() {
   ArduinoCloud.update();
    float rawPressure = bmp.readPressure() / 100.0;
    pressure = rawPressure / pow((1 - (ALTITUDE / 44330.0)), 5.255);
+   pressure = 1008.02;
    //altitude = 1013.15;
    //bmp.readAltitude(SEA_LEVEL_PRESSURE);
 
   //light_Intensity = (analogRead(light_sensor));
 
-  temperature = dht.readTemperature();
+  temperature = (dht.readTemperature()-1.899);
   float humidity = dht.readHumidity();
   hUMIDITY=(humidity * humidity_slope) + humidity_offset;
   int mq2Level = analogRead(MQ2_PIN)/21.66;
@@ -107,48 +108,49 @@ void loop() {
      air_QualityText = "Air Quality is Hazardous";
   }
 
-if (WiFi.status() == WL_CONNECTED) {
-    float temp = dht.readTemperature();
-    float hum = dht.readHumidity();
-    int airQualityRaw = air_quality;
-
-    // Debug print
-    Serial.println("Temp: " + String(temp) + " °C");
-    Serial.println("Humidity: " + String(hum) + " %");
-    Serial.println("Air Quality (Raw): " + String(airQualityRaw));
-
-    // Create JSON payload
-    String jsonData = "{\"temperature\": " + String(temp) + 
-                      ", \"humidity\": " + String(hum) + 
-                      ", \"air_quality\": " + String(airQualityRaw) + "}";
-
+   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
-    http.begin(scriptURL);
-    http.addHeader("Content-Type", "application/json");
 
-    int httpResponseCode = http.POST(jsonData);
-    Serial.print("HTTP Response code: ");
-    Serial.println(httpResponseCode);
+    // Simulated sensor data — replace with real readings from sensors
+    float airQuality = air_quality;     // value1
+    float temp= temperature;     // value2
+    float humid = hUMIDITY;
+    // Construct URL with query parameters
+    String fullURL = String(scriptURL) + "?value1=" + airQuality + "&value2=" + temperature + "&value3=" + humidity;
+    Serial.println("Sending request to:");
+    Serial.println(fullURL);
+
+    http.begin(fullURL);
+    int httpCode = http.GET();
+
+    if (httpCode > 0) {
+      String response = http.getString();
+      Serial.println("Response from server:");
+      Serial.println(response);
+    } else {
+      Serial.print("Error sending GET: ");
+      Serial.println(http.errorToString(httpCode));
+    }
 
     http.end();
-  } else {
-    Serial.println("WiFi Disconnected");
-  }
+    } else {
+      Serial.println("WiFi Disconnected");
+    }
 
-  delay(60000);
+    delay(1000);
 }
 /*
   Since AirQuality is READ_WRITE variable, onAirQualityChange() is
   executed every time a new value is received from IoT Cloud.
-*/
+
 void onAirQualityChange()  {
   // Add your code here to act upon AirQuality change
 }
 
-/*
+
   Since Temperature is READ_WRITE variable, onTemperatureChange() is
   executed every time a new value is received from IoT Cloud.
-*/
+
 void onTemperatureChange()  {
   // Add your code here to act upon Temperature change
 }
@@ -157,7 +159,7 @@ void onTemperatureChange()  {
 /*
   Since LightIntensity is READ_WRITE variable, onLightIntensityChange() is
   executed every time a new value is received from IoT Cloud.
-*/
+
 void onLightIntensityChange()  {
   // Add your code here to act upon LightIntensity change
 }
@@ -165,7 +167,7 @@ void onLightIntensityChange()  {
 /*
   Since SoundIntensity is READ_WRITE variable, onSoundIntensityChange() is
   executed every time a new value is received from IoT Cloud.
-*/
+
 void onSoundIntensityChange()  {
   // Add your code here to act upon SoundIntensity change
 }
@@ -173,7 +175,7 @@ void onSoundIntensityChange()  {
 /*
   Since Humidity is READ_WRITE variable, onHumidityChange() is
   executed every time a new value is received from IoT Cloud.
-*/
+
 void onHumidityChange()  {
   // Add your code here to act upon Humidity change
 }
@@ -181,7 +183,7 @@ void onHumidityChange()  {
 /*
   Since Level is READ_WRITE variable, onLevelChange() is
   executed every time a new value is received from IoT Cloud.
-*/
+
 void onLevelChange()  {
   // Add your code here to act upon Level change
 }
@@ -189,8 +191,8 @@ void onLevelChange()  {
 /*
   Since SoundLevel is READ_WRITE variable, onSoundLevelChange() is
   executed every time a new value is received from IoT Cloud.
-*/
+
 void onSoundLevelChange()  {
   // Add your code here to act upon SoundLevel change
 }
-
+*/
