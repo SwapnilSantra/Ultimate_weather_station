@@ -1,0 +1,16 @@
+{
+  "name": "JsonLogger",
+  "version": "1.1.9",
+  "keywords": ["communication"],
+  "description": "An easy-to-use, small, fast and portable JSON builder and logger for IoT logging, data acquisition and analytics",
+  "frameworks": "*",
+  "platforms": "*",
+  "authors": {
+    "email": "alanpc@gmail.com",
+    "name": "Alan Chen"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ravelab/JsonLogger"
+  }
+}
