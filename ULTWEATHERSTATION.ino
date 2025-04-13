@@ -12,7 +12,7 @@
 #define ALTITUDE 18
 #define SEA_LEVEL_PRESSURE 1013.25 
 //............................................................................
-//Init.. DHT and BMP object
+//Init.. DHT and BMP 
 DHT dht(DHTpin, DHTTYPE);
 Adafruit_BMP280 bmp;
 
