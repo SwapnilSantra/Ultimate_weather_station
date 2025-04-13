@@ -9,7 +9,7 @@ const char SSID[]               = SECRET_SSID;    // Network SSID (name)
 const char PASS[]               = SECRET_OPTIONAL_PASS;    // Network password (use for WPA, or use as key for WEP)
 const char DEVICE_KEY[]  = SECRET_DEVICE_KEY;    // Secret device password
 
-
+//In IOT cloud free version you can only assign 5 things. Get premium for 10 things slot or more than 10 
 float hUMIDITY;
 float pressure;
 float altitude;
