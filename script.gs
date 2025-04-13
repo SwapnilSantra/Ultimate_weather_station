@@ -7,7 +7,7 @@ function doGet(e) {
   if (!e || !e.parameter) {
     result = 'No Parameters';
   } else {
-    var sheet_id = '1dnggcRKV5SROhTPjeb_RFN4XAYWlal32ypaBGAcllMI'; 		
+    var sheet_id = 'Your Google Sheet Id Here'; //Paste Your Google Sheet Id 	
     var sheet = SpreadsheetApp.openById(sheet_id).getActiveSheet();		
     var newRow = sheet.getLastRow() + 1;						
     var rowData = [];
@@ -38,9 +38,9 @@ function doGet(e) {
     }
 
     // Check thresholds and send email alert
-    if (airQuality > 150 || temperature > 37) {
+    if (airQuality > p1 || temperature > p2) {
       sendAlertEmail(airQuality, temperature);
-      result += " | Alert email sent.";
+      result += " | Alert email sent.";  // Assign p1 and p2 for your threshold value to send email alert
     }
 
     Logger.log(JSON.stringify(rowData));
@@ -56,16 +56,16 @@ function stripQuotes(value) {
 }
 
 function sendAlertEmail(airQuality, temperature) {
-  var recipient = "swapnilsantra2k20@gmail.com";  // <-- change this
+  var recipient = "Email_Id";  // <-- Put Email Id where you want to get email Alert
   var subject = "🚨 Sensor Alert from IoT System";
-  var body = "⚠️ ALERT!\n\n";
+  var body = "⚠️ Attention!!!\n\n";
 
-  if (airQuality > 150) {
-    body += "Air Quality is too high: " + airQuality + " (safe ≤ 150)\n";
+  if (airQuality > p1) {
+    body += "Air Quality is too high: " + airQuality + " (safe ≤ p1)\n";//put p1 value
   }
 
-  if (temperature > 37) {
-    body += "Temperature is too high: " + temperature + "°C (safe ≤ 37°C)\n";
+  if (temperature > p2) {
+    body += "Temperature is too high: " + temperature + "°C (safe ≤ p2)\n";//put p2 value
   }
 
   body += "\nTimestamp: " + new Date().toLocaleString();
